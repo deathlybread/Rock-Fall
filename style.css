@@ -1,3 +1,8 @@
+body {
+    background-color: #2E2E2E;
+    /*#C47E78*/
+}
+
 #container {
     width: 500px;
     height: 500px;
