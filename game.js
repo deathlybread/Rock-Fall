@@ -61,12 +61,12 @@ var game = {
 
     menu: {
         intro: {
-            hasFinished: false,
+            fall_hasFinished: false,
             rock_posY: -100,
             fall_posY: -100,
             rock_posX: 146,
             fall_posX: 146,
-            shake_direction: 'right',
+            shake_direction: 'down',
             shake_fact: 10
         },
         renderMenu: function () {
@@ -75,33 +75,38 @@ var game = {
             ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY);
 
             //Animation
-            if (game.menu.intro.rock_posY < 100) game.menu.intro.rock_posY++;
+            if (game.menu.intro.rock_posY < 100 && game.menu.intro.fall_hasFinished == false) game.menu.intro.rock_posY++;
             else {
-                if (game.menu.intro.fall_posY < 171) {
+                if (game.menu.intro.fall_posY < 171 && game.menu.intro.fall_hasFinished == false) {
                     game.menu.intro.fall_posY += 4.5;
                     game.audio.playOnce('logo-fall');
                 }
                 else {
+                    //Falling animation has finished
+                    game.menu.intro.fall_hasFinished = true;
+
                     game.audio.playOnce('logo-hit');
 
                     //Shake animation
-                    if (game.menu.intro.shake_direction == 'right')  {
-                        if (game.menu.intro.fall_posX < 175) {
-                            game.menu.intro.fall_posX += game.menu.intro.shake_fact;
-                            game.menu.intro.rock_posX += game.menu.intro.shake_fact;
+                    if (game.menu.intro.shake_direction == 'up')  {
+                        if (game.menu.intro.rock_posY > 80) {
+                            game.menu.intro.fall_posY -= game.menu.intro.shake_fact;
+                            game.menu.intro.rock_posY -= game.menu.intro.shake_fact;
 
-                            if (game.menu.intro.shake_fact > 0.2) game.menu.intro.shake_fact -= 0.2;
+                            if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
+                            else game.menu.intro.shake_fact = 0;
                         }
-                        else game.menu.intro.shake_direction = 'left';
+                        else game.menu.intro.shake_direction = 'down';
                     }
-                    else if (game.menu.intro.shake_direction == 'left') {
-                        if (game.menu.intro.fall_posX > 117) {
-                            game.menu.intro.fall_posX -= game.menu.intro.shake_fact;
-                            game.menu.intro.rock_posX -= game.menu.intro.shake_fact;
+                    else if (game.menu.intro.shake_direction == 'down') {
+                        if (game.menu.intro.fall_posY < 191) {
+                            game.menu.intro.fall_posY += game.menu.intro.shake_fact;
+                            game.menu.intro.rock_posY += game.menu.intro.shake_fact;
 
-                            if (game.menu.intro.shake_fact > 0.2) game.menu.intro.shake_fact -= 0.2;
+                            if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
+                            else game.menu.intro.shake_fact = 0;
                         }
-                        else game.menu.intro.shake_direction = 'right';
+                        else game.menu.intro.shake_direction = 'up';
                     }
                 }
             }

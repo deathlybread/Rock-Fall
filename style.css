@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Pixel;
+  src: url("assets/fonts/04B_03_.TTF");
+}
+
 body {
     background-color: #2E2E2E;
     /*#C47E78*/
@@ -8,4 +13,10 @@ body {
     height: 500px;
     margin-left: auto;
     margin-right: auto;
-} 
+}
+
+#secret {
+  color: #2E2E2E;
+  font-family: Pixel;
+  font-size: 10px;
+}
