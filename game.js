@@ -19,6 +19,7 @@ var requestAnimationFrame = window.requestAnimationFrame ||
 //Global sprites
 var logo_rock = new Image();
 var logo_fall = new Image();
+var arrow = new Image();
 //**********************
 
 //Main game object
@@ -32,7 +33,10 @@ var game = {
 
         logo_fall.src = 'assets/images/Logo-fall.png';
         logo_fall.onload = function () {console.log('LOGO_FALL LOADED');};
-        //Once preloading has finished, initialise game
+
+        arrow.src = 'assets/images/Arrow.png';
+        arrow.onload = function () {console.log('ARROW LOADED');};
+        //Once preloading has finished, Initialise game
         game.init();
     },
 
@@ -62,6 +66,7 @@ var game = {
     menu: {
         intro: {
             fall_hasFinished: false,
+            shake_hasFinished: false,
             rock_posY: -100,
             fall_posY: -100,
             rock_posX: 146,
@@ -75,42 +80,59 @@ var game = {
             ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY);
 
             //Animation
-            if (game.menu.intro.rock_posY < 100 && game.menu.intro.fall_hasFinished == false) game.menu.intro.rock_posY++;
-            else {
-                if (game.menu.intro.fall_posY < 171 && game.menu.intro.fall_hasFinished == false) {
-                    game.menu.intro.fall_posY += 4.5;
-                    game.audio.playOnce('logo-fall');
-                }
-                else {
-                    //Falling animation has finished
-                    game.menu.intro.fall_hasFinished = true;
+            if (game.menu.intro.fall_hasFinished == false || game.menu.intro.shake_hasFinished == false) {
+              if (game.menu.intro.rock_posY < 100 && game.menu.intro.fall_hasFinished == false) game.menu.intro.rock_posY++;
+              else {
+                  if (game.menu.intro.fall_posY < 171 && game.menu.intro.fall_hasFinished == false) {
+                      game.menu.intro.fall_posY += 4.5;
+                      game.audio.playOnce('logo-fall');
+                  }
+                  else {
+                      //Falling animation has finished
+                      game.menu.intro.fall_hasFinished = true;
 
-                    game.audio.playOnce('logo-hit');
+                      game.audio.playOnce('logo-hit');
 
-                    //Shake animation
-                    if (game.menu.intro.shake_direction == 'up')  {
-                        if (game.menu.intro.rock_posY > 80) {
-                            game.menu.intro.fall_posY -= game.menu.intro.shake_fact;
-                            game.menu.intro.rock_posY -= game.menu.intro.shake_fact;
+                      //Shake animation
+                      if (game.menu.intro.shake_direction == 'up')  {
+                          if (game.menu.intro.rock_posY > 80) {
+                              game.menu.intro.fall_posY -= game.menu.intro.shake_fact;
+                              game.menu.intro.rock_posY -= game.menu.intro.shake_fact;
 
-                            if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
-                            else game.menu.intro.shake_fact = 0;
-                        }
-                        else game.menu.intro.shake_direction = 'down';
-                    }
-                    else if (game.menu.intro.shake_direction == 'down') {
-                        if (game.menu.intro.fall_posY < 191) {
-                            game.menu.intro.fall_posY += game.menu.intro.shake_fact;
-                            game.menu.intro.rock_posY += game.menu.intro.shake_fact;
+                              if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
+                              else {
+                                game.menu.intro.shake_fact = 0;
+                                game.menu.intro.shake_hasFinished = true;
+                              }
+                          }
+                          else game.menu.intro.shake_direction = 'down';
+                      }
+                      else if (game.menu.intro.shake_direction == 'down') {
+                          if (game.menu.intro.fall_posY < 191) {
+                              game.menu.intro.fall_posY += game.menu.intro.shake_fact;
+                              game.menu.intro.rock_posY += game.menu.intro.shake_fact;
 
-                            if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
-                            else game.menu.intro.shake_fact = 0;
-                        }
-                        else game.menu.intro.shake_direction = 'up';
+                              if (game.menu.intro.shake_fact > 0) game.menu.intro.shake_fact -= 0.2;
+                              else {
+                                game.menu.intro.shake_fact = 0;
+                                game.menu.intro.shake_hasFinished = true;
+                              }
+                          }
+                          else game.menu.intro.shake_direction = 'up';
                     }
                 }
             }
         }
+        //Animations have finished
+        else {
+          //Draw menu options text
+          ctx.font = '50px Pixel';
+          ctx.fillStyle = '#f36c60';
+          ctx.fillText('Play', 192, 313);
+          ctx.fillStyle = '#ffab91';
+          ctx.fillText('Play', 191, 310);
+        }
+      }
     },
 
     audio: {
