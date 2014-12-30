@@ -9,18 +9,20 @@
     </head>
     <body>
         <div id="container"><canvas id="game">ERR: YOUR BROWSER DOES NOT SUPPORT HTML5 CANVAS!</canvas></div>
-        <script src="game.js" type="text/javascript"></script>
         <span id="secret">Hello!</span>
+        <!--Game audio clips-->
+        <audio id="logo-hit" preload="auto">
+            <source src="assets/sounds/Logo-hit.mp3">
+            <source src="assets/sounds/Logo-hit.wav">
+            <source src="assets/sounds/Logo-hit.ogg"> 
+            <source src="assets/sounds/Logo-hit.m4a">   
+        </audio>
+        <audio id="logo-fall" preload="auto">
+            <source src="assets/sounds/Logo-fall.mp3">
+            <source src="assets/sounds/Logo-fall.wav">
+            <source src="assets/sounds/Logo-fall.ogg">  
+            <source src="assets/sounds/Logo-fall.m4a">  
+        </audio>
+        <script src="game.js" type="text/javascript"></script>
     </body>
-    <!--Game audio clips-->
-    <audio id="logo-hit">
-        <source src="assets/sounds/Logo-hit.mp3" type="audio/mpeg">
-        <source src="assets/sounds/Logo-hit.wav" type="audio/wav">
-        <source src="assets/sounds/Logo-hit.ogg" type="audio/ogg">    
-    </audio>
-    <audio id="logo-fall" src="assets/sounds/Logo-fall.wav">
-        <source src="assets/sounds/Logo-fall.mp3" type="audio/mpeg">
-        <source src="assets/sounds/Logo-fall.wav" type="audio/wav">
-        <source src="assets/sounds/Logo-fall.ogg" type="audio/ogg">    
-    </audio>
 </html>

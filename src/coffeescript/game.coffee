@@ -29,7 +29,7 @@ wall_right = new Image()
 game = 
 	main_hasStarted: false
 
-	#Preload images
+	#Preload images and sounds
 	preload: ->
 		logo_rock.src = 'assets/images/Logo-rock.png'
 		logo_rock.onload = -> console.log 'LOGO_ROCK LOADED'
@@ -54,7 +54,7 @@ game =
 
 		#Check if user's device is in portrait orientation
 		alert 'Game best played in landscape orientation!' if HEIGHT > WIDTH
-
+		
 		#Start rendering
 		do game.render
 
