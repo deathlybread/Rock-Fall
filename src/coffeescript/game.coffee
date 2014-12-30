@@ -21,6 +21,8 @@ requestAnimationFrame = window.requestAnimationFrame ||
 logo_rock = new Image()
 logo_fall = new Image()
 arrow = new Image()
+wall_left = new Image()
+wall_right = new Image()
 #**********************
 
 #Main game object
@@ -30,11 +32,16 @@ game =
 	#Preload images
 	preload: ->
 		logo_rock.src = 'assets/images/Logo-rock.png'
-		logo_rock.onload = -> console.log('LOGO_ROCK LOADED')
+		logo_rock.onload = -> console.log 'LOGO_ROCK LOADED'
 
 		logo_fall.src = 'assets/images/Logo-fall.png'
-		logo_fall.onload = -> console.log('LOGO_FALL LOADED')
+		logo_fall.onload = -> console.log 'LOGO_FALL LOADED'
 
+		wall_left.src = 'assets/images/Wall-left.png'
+		wall_left.onload = -> console.log 'WALL_LEFT LOADED'
+
+		wall_right.src = 'assets/images/Wall-right.png'
+		wall_right.onload = -> console.log 'WALL_RIGHT LOADED'
 		#Once preloading has finished, initialise game
 		do game.init
 
@@ -57,6 +64,10 @@ game =
 		#Clear screen
 		ctx.clearRect(0, 0, 500, 500)
 
+		#Fill screen with background color
+		ctx.fillStyle = '#e84e40'
+		ctx.fillRect(0, 0, 500, 500)
+
 		#Render menu if game has not started
 		do game.menu.renderMenu if game.main_hasStarted == false
 
@@ -76,14 +87,18 @@ game =
 			shake_fact: 10
 
 		renderMenu: ->
+			#Draw background
+			ctx.drawImage(wall_left, 0, 0)
+			ctx.drawImage(wall_right, 447, 0)
+
 			#Draw logo
 			ctx.drawImage(logo_rock, game.menu.intro.rock_posX, game.menu.intro.rock_posY)
 			ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY)
 
 			#Animations
 			if game.menu.intro.fall_hasFinished == false 
-			    if game.menu.intro.rock_posY < 100
-			    	game.menu.intro.rock_posY++
+				if game.menu.intro.rock_posY < 100 
+					game.menu.intro.rock_posY++
 				else 
 					if game.menu.intro.fall_posY < 171
 						game.menu.intro.fall_posY += 4.5
@@ -94,7 +109,36 @@ game =
 
 						game.menu.intro.fall_hasFinished = true
 
-						return
+			else if game.menu.intro.fall_hasFinished == true and game.menu.intro.shake_hasFinished == false
+				#Shake animation
+				if game.menu.intro.shake_direction == 'up'
+					if game.menu.intro.rock_posY > 80
+						game.menu.intro.rock_posY -= game.menu.intro.shake_fact
+						game.menu.intro.fall_posY -= game.menu.intro.shake_fact
+
+						if game.menu.intro.shake_fact > 0
+							game.menu.intro.shake_fact -= 0.2
+						else 
+							game.menu.intro.shake_fact = 0
+							game.menu.intro.shake_hasFinished = true
+
+					else game.menu.intro.shake_direction = 'down'		
+
+				else if game.menu.intro.shake_direction == 'down'
+					if (game.menu.intro.fall_posY < 191)
+						game.menu.intro.fall_posY += game.menu.intro.shake_fact
+						game.menu.intro.rock_posY += game.menu.intro.shake_fact
+
+						if game.menu.intro.shake_fact > 0
+							game.menu.intro.shake_fact -= 0.2
+						else
+							game.menu.intro.shake_fact = 0
+							game.menu.intro.shake_hasFinished = true
+						
+					else
+						game.menu.intro.shake_direction = 'up'
+
+			return
 						
 	audio:
 		old: null
