@@ -61,7 +61,7 @@
     },
     render: function() {
       ctx.clearRect(0, 0, 500, 500);
-      ctx.fillStyle = '#e84e40';
+      ctx.fillStyle = '#D44639';
       ctx.fillRect(0, 0, 500, 500);
       if (game.main_hasStarted === false) {
         game.menu.renderMenu();
@@ -72,19 +72,36 @@
       intro: {
         fall_hasFinished: false,
         shake_hasFinished: false,
+        options_hasFinished: false,
         rock_posY: -100,
         fall_posY: -100,
         rock_posX: 146,
         fall_posX: 146,
         shake_direction: 'down',
-        shake_fact: 10
+        shake_fact: 10,
+        options_speed: 10
       },
       renderMenu: function() {
         ctx.drawImage(wall_left, 0, 0);
         ctx.drawImage(wall_right, 447, 0);
         ctx.drawImage(logo_rock, game.menu.intro.rock_posX, game.menu.intro.rock_posY);
         ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY);
-        if (game.menu.intro.fall_hasFinished === false) {
+        ctx.fillStyle = '#f36c60';
+        ctx.font = '50px Pixel';
+        ctx.fillText('Play', 191, 305);
+        ctx.fillStyle = '#ffab91';
+        ctx.font = '50px Pixel';
+        ctx.fillText('Play', 191, 300);
+        ctx.fillStyle = '#f36c60';
+        ctx.font = '50px Pixel';
+        ctx.fillText('Options', 155, 375);
+        ctx.fillStyle = '#ffab91';
+        ctx.font = '50px Pixel';
+        ctx.fillText('Options', 155, 370);
+        game.menu.handleAnimations();
+      },
+      handleAnimations: function() {
+        if (game.menu.intro.fall_hasFinished === false && game.menu.intro.shake_hasFinished === false && game.menu.intro.options_hasFinished === false) {
           if (game.menu.intro.rock_posY < 100) {
             game.menu.intro.rock_posY++;
           } else {
@@ -96,7 +113,7 @@
               game.menu.intro.fall_hasFinished = true;
             }
           }
-        } else if (game.menu.intro.fall_hasFinished === true && game.menu.intro.shake_hasFinished === false) {
+        } else if (game.menu.intro.fall_hasFinished === true && game.menu.intro.shake_hasFinished === false && game.menu.intro.options_hasFinished === false) {
           if (game.menu.intro.shake_direction === 'up') {
             if (game.menu.intro.rock_posY > 80) {
               game.menu.intro.rock_posY -= game.menu.intro.shake_fact;

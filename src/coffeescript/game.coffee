@@ -62,16 +62,16 @@ game =
 
 	render: ->
 		#Clear screen
-		ctx.clearRect(0, 0, 500, 500)
+		ctx.clearRect 0, 0, 500, 500
 
 		#Fill screen with background color
-		ctx.fillStyle = '#e84e40'
-		ctx.fillRect(0, 0, 500, 500)
+		ctx.fillStyle = '#D44639'
+		ctx.fillRect 0, 0, 500, 500
 
 		#Render menu if game has not started
 		do game.menu.renderMenu if game.main_hasStarted == false
 
-		requestAnimationFrame(game.render)
+		requestAnimationFrame game.render
 
 		return
 
@@ -79,24 +79,46 @@ game =
 		intro:
 			fall_hasFinished: false
 			shake_hasFinished: false
+			options_hasFinished: false
 			rock_posY: -100
 			fall_posY: -100
 			rock_posX: 146
 			fall_posX: 146
 			shake_direction: 'down'
 			shake_fact: 10
+			options_speed: 10
 
 		renderMenu: ->
 			#Draw background
-			ctx.drawImage(wall_left, 0, 0)
-			ctx.drawImage(wall_right, 447, 0)
+			ctx.drawImage wall_left, 0, 0
+			ctx.drawImage wall_right, 447, 0 
 
 			#Draw logo
-			ctx.drawImage(logo_rock, game.menu.intro.rock_posX, game.menu.intro.rock_posY)
-			ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY)
+			ctx.drawImage logo_rock, game.menu.intro.rock_posX, game.menu.intro.rock_posY
+			ctx.drawImage logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY
 
-			#Animations
-			if game.menu.intro.fall_hasFinished == false 
+			#Draw menu options
+			#Play
+			ctx.fillStyle = '#f36c60'
+			ctx.font = '50px Pixel'
+			ctx.fillText 'Play', 191, 305
+			ctx.fillStyle = '#ffab91'
+			ctx.font = '50px Pixel'
+			ctx.fillText 'Play', 191, 300
+			#Options
+			ctx.fillStyle = '#f36c60'
+			ctx.font = '50px Pixel'
+			ctx.fillText 'Options', 155, 375
+			ctx.fillStyle = '#ffab91'
+			ctx.font = '50px Pixel'
+			ctx.fillText 'Options', 155, 370
+
+			do game.menu.handleAnimations
+
+			return
+		
+		handleAnimations: ->
+			if game.menu.intro.fall_hasFinished == false and game.menu.intro.shake_hasFinished == false and game.menu.intro.options_hasFinished == false
 				if game.menu.intro.rock_posY < 100 
 					game.menu.intro.rock_posY++
 				else 
@@ -109,7 +131,7 @@ game =
 
 						game.menu.intro.fall_hasFinished = true
 
-			else if game.menu.intro.fall_hasFinished == true and game.menu.intro.shake_hasFinished == false
+			else if game.menu.intro.fall_hasFinished == true and game.menu.intro.shake_hasFinished == false and game.menu.intro.options_hasFinished == false
 				#Shake animation
 				if game.menu.intro.shake_direction == 'up'
 					if game.menu.intro.rock_posY > 80
@@ -139,7 +161,7 @@ game =
 						game.menu.intro.shake_direction = 'up'
 
 			return
-						
+
 	audio:
 		old: null
 
