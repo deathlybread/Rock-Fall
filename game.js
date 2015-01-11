@@ -69,6 +69,7 @@
       requestAnimationFrame(game.render);
     },
     menu: {
+      selectedOption: 1,
       intro: {
         fall_hasFinished: false,
         shake_hasFinished: false,
@@ -79,7 +80,10 @@
         fall_posX: 146,
         shake_direction: 'down',
         shake_fact: 10,
-        options_speed: 10
+        options_speed: 10,
+        options_play_posY: 580,
+        options_options_posY: 620,
+        anim_finished: false
       },
       renderMenu: function() {
         ctx.drawImage(wall_left, 0, 0);
@@ -88,17 +92,42 @@
         ctx.drawImage(logo_fall, game.menu.intro.fall_posX, game.menu.intro.fall_posY);
         ctx.fillStyle = '#f36c60';
         ctx.font = '50px Pixel';
-        ctx.fillText('Play', 191, 305);
+        ctx.fillText('Play', 192, game.menu.intro.options_play_posY);
         ctx.fillStyle = '#ffab91';
         ctx.font = '50px Pixel';
-        ctx.fillText('Play', 191, 300);
+        ctx.fillText('Play', 192, game.menu.intro.options_play_posY - 5);
         ctx.fillStyle = '#f36c60';
         ctx.font = '50px Pixel';
-        ctx.fillText('Options', 155, 375);
+        ctx.fillText('Options', 153, game.menu.intro.options_options_posY);
         ctx.fillStyle = '#ffab91';
         ctx.font = '50px Pixel';
-        ctx.fillText('Options', 155, 370);
-        game.menu.handleAnimations();
+        ctx.fillText('Options', 153, game.menu.intro.options_options_posY - 5);
+        if (game.menu.intro.anim_finished === false) {
+          game.menu.handleAnimations();
+        } else {
+          if (game.menu.selectedOption === 1) {
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#ffab91';
+            ctx.moveTo(159, 285);
+            ctx.lineTo(179, 285);
+            ctx.stroke();
+            ctx.moveTo(326, 285);
+            ctx.lineTo(306, 285);
+            ctx.stroke();
+          } else if (game.menu.selectedOption === 0) {
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#ffab91';
+            ctx.moveTo(119, 355);
+            ctx.lineTo(139, 355);
+            ctx.stroke();
+            ctx.moveTo(377, 355);
+            ctx.lineTo(357, 355);
+            ctx.stroke();
+          }
+          game.menu.handleInput();
+        }
       },
       handleAnimations: function() {
         if (game.menu.intro.fall_hasFinished === false && game.menu.intro.shake_hasFinished === false && game.menu.intro.options_hasFinished === false) {
@@ -141,7 +170,25 @@
               game.menu.intro.shake_direction = 'up';
             }
           }
+        } else if (game.menu.intro.fall_hasFinished === true && game.menu.intro.shake_hasFinished === true && game.menu.intro.options_hasFinished === false) {
+          if (game.menu.intro.options_play_posY > 305) {
+            game.menu.intro.options_play_posY -= 3;
+          } else {
+            game.menu.intro.anim_finished = true;
+          }
+          if (game.menu.intro.options_options_posY > 375) {
+            game.menu.intro.options_options_posY -= 3;
+          }
         }
+      },
+      handleInput: function() {
+        return document.addEventListener('keydown', function(e) {
+          if (e.keyCode === 40 && game.menu.selectedOption === 1) {
+            return game.menu.selectedOption--;
+          } else if (e.keyCode === 38 && game.menu.selectedOption === 0) {
+            return game.menu.selectedOption++;
+          }
+        });
       }
     },
     audio: {
