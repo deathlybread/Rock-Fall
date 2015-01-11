@@ -182,11 +182,15 @@
         }
       },
       handleInput: function() {
-        return document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function(e) {
           if (e.keyCode === 40 && game.menu.selectedOption === 1) {
-            return game.menu.selectedOption--;
+            game.menu.selectedOption--;
+            game.audio.playOnce("menu-select");
+            return game.audio.clear();
           } else if (e.keyCode === 38 && game.menu.selectedOption === 0) {
-            return game.menu.selectedOption++;
+            game.menu.selectedOption++;
+            game.audio.playOnce("menu-select");
+            return game.audio.clear();
           }
         });
       }
@@ -198,6 +202,9 @@
           $('#' + sound)[0].play();
           game.audio.old = sound;
         }
+      },
+      clear: function() {
+        return game.audio.old = null;
       }
     }
   };

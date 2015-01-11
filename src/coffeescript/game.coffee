@@ -211,9 +211,15 @@ game =
 			document.addEventListener 'keydown', (e) ->
 				if e.keyCode == 40 and game.menu.selectedOption == 1
 					game.menu.selectedOption--
+					game.audio.playOnce "menu-select"
+					do game.audio.clear
 
 				else if e.keyCode == 38 and game.menu.selectedOption == 0
 					game.menu.selectedOption++
+					game.audio.playOnce "menu-select"
+					do game.audio.clear
+
+			return
 
 	audio:
 		old: null
@@ -224,5 +230,8 @@ game =
 				game.audio.old = sound
 
 				return
+
+		clear: ->
+			game.audio.old = null
 
 $ do game.preload 
